@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop – Iblean Herbs</title>
+<meta name="description" content="Wilde Bergkräuter, Tees und Gewürze aus den Monti Iblei rund um Ragusa Ibla – Familiengeschäft in Sizilien.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+
+<div class="leiste">10 % Rabatt ab 100 € Bestellwert · Versand weltweit · Der Webshop ist noch im Aufbau</div>
+<header class="kopf">
+  <div class="breite">
+    <a class="logo" href="./"><b>Iblean Herbs</b><small>Ibleische Kräuter</small></a>
+    <nav class="haupt">
+      <a href="shop.html">Shop</a>
+      <a href="./#rubriken">Rubriken</a>
+      <a href="./#anbau">Eigener Anbau</a>
+      <a href="./#ueber">Über uns</a>
+      <a href="./#journal">Journal</a>
+    </nav>
+    <button class="korb-knopf" data-korb-auf aria-label="Warenkorb öffnen">Warenkorb <span data-korb-zahl>0</span></button>
+  </div>
+</header>
+
+<main>
+  <section class="shop-kopf">
+    <div class="breite"><h1 style="font-size:clamp(2rem,5vw,3.2rem)">Shop</h1><p>Kräuter, Tees, Gewürze und Spezialitäten aus den Monti Iblei.</p></div>
+  </section>
+  <section style="padding-top:40px">
+    <div class="breite">
+      <div class="bau-band"><b>Der Webshop ist noch im Aufbau.</b> Preise und Bestände sind vorläufig, und es wird noch nichts berechnet. Bestellungen nehmen wir bis dahin gern per E-Mail entgegen.</div>
+      <div class="filter" id="filter"></div>
+      <div class="raster" id="shop-raster"></div>
+    </div>
+  </section>
+</main>
+
+
+<footer>
+  <div class="breite">
+    <div class="spalten">
+      <div><h4>Iblean Herbs</h4><p>Ibleische Kräuter, Tees und Gewürze aus Ragusa Ibla, Sizilien.</p></div>
+      <div><h4>Shop</h4><ul><li><a href="shop.html#kraeuter">Kräuter</a></li><li><a href="shop.html#tee">Tees</a></li><li><a href="shop.html#gewuerze">Gewürze</a></li><li><a href="shop.html#sizilien">Sizilianische Produkte</a></li></ul></div>
+      <div><h4>Info</h4><ul><li><a href="./#ueber">Über uns</a></li><li><a href="impressum.html">Impressum</a></li><li><a href="impressum.html#datenschutz">Datenschutz</a></li></ul></div>
+    </div>
+    <p class="klein">© 2026 Iblean Herbs · Ragusa Ibla, Sizilien</p>
+  </div>
+</footer>
+
+<div class="korb-schleier" data-korb-zu></div>
+<aside class="korb" aria-label="Warenkorb">
+  <header><h3>Warenkorb</h3><button class="zu" data-korb-zu aria-label="Schließen">×</button></header>
+  <ul id="korb-liste"></ul>
+  <footer>
+    <div class="summe"><span>Zwischensumme</span><span id="korb-summe">€0,00</span></div>
+    <button class="knopf" id="zur-kasse">Zur Kasse</button>
+    <p class="bau">Der Webshop ist noch im Aufbau – es wird noch nichts berechnet.</p>
+  </footer>
+</aside>
+
+<script type="module">
+  import { PRODUKTE, KATEGORIEN, karte, korbVerdrahten } from "./produkte.js";
+  const filter = document.querySelector("#filter"), raster = document.querySelector("#shop-raster");
+  const knoepfe = [["alle", "Alle"], ...Object.entries(KATEGORIEN)];
+  filter.innerHTML = knoepfe.map(([k, n]) => `<button data-kat="${k}">${n}</button>`).join("");
+  function zeige(kat) {
+    if (!KATEGORIEN[kat]) kat = "alle";
+    filter.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.kat === kat));
+    raster.innerHTML = PRODUKTE.filter((p) => kat === "alle" || p.kat === kat).map(karte).join("");
+  }
+  filter.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { history.replaceState(null, "", b.dataset.kat === "alle" ? "shop.html" : "#" + b.dataset.kat); zeige(b.dataset.kat); } });
+  addEventListener("hashchange", () => zeige(location.hash.slice(1)));
+  zeige(location.hash.slice(1));
+  korbVerdrahten();
+</script>
+</body>
+</html>
